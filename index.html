@@ -3,81 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrackSwift - Package Tracker</title>
+  <title>TrackSwift</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 40px;
-    }
-    .tracker-box {
-      max-width: 600px;
-      margin: auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1 {
+      background: #f4f4f4;
+      padding: 20px;
       text-align: center;
-      color: #222;
     }
-    input {
-      width: 100%;
+    .tracker {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+    input, button {
       padding: 10px;
-      font-size: 16px;
-      margin: 15px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      margin-top: 10px;
+      width: 80%;
     }
-    button {
-      background: #007bff;
-      color: white;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      width: 100%;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 25px;
-      padding: 15px;
-      background: #f0f0f0;
-      border-radius: 5px;
+    .status {
+      margin-top: 20px;
+      text-align: left;
     }
   </style>
 </head>
 <body>
-  <div class="tracker-box">
-    <h1>TrackSwift</h1>
-    <p>Enter your tracking number:</p>
-    <input type="text" id="trackingInput" placeholder="e.g., TS123456789US" />
-    <button onclick="trackPackage()">Track</button>
-    <div class="result" id="trackingResult"></div>
+  <div class="tracker">
+    <h2>TrackSwift Shipment Tracker</h2>
+    <input type="text" id="trackingInput" placeholder="Enter tracking number" />
+    <br>
+    <button onclick="track()">Track</button>
+    <div id="result" class="status"></div>
   </div>
 
   <script>
-    function trackPackage() {
+    const mockTrackingNumber = "TS123456789US";
+
+    const timeline = [
+      { date: "May 5, 2025", location: "New York, NY", status: "Shipment Accepted" },
+      { date: "May 6, 2025", location: "New York, NY", status: "In Transit" },
+      { date: "May 8, 2025", location: "Philadelphia, PA", status: "Arrived at Facility" },
+      { date: "May 10, 2025", location: "Baltimore, MD", status: "Departed Facility" },
+      { date: "May 12, 2025", location: "Richmond, VA", status: "Out for Delivery" },
+      { date: "May 16, 2025", location: "Virginia Beach, VA", status: "Delivered" }
+    ];
+
+    function track() {
       const input = document.getElementById("trackingInput").value.trim();
-      const result = document.getElementById("trackingResult");
+      const result = document.getElementById("result");
+      result.innerHTML = "";
 
-      // Example mock tracking data
-     const mockTracking = {
-  "TS123456789US": {
-    status: "In Transit",
-    lastLocation: "Philadelphia, PA",
-    eta: "May 16, 2025"
-  }
-};
+      if (input === mockTrackingNumber) {
+        const today = new Date("May 8, 2025"); // <-- Change this date to simulate today
+        const progress = timeline.filter(item => new Date(item.date) <= today);
+        
+        progress.forEach(item => {
+          const entry = document.createElement("p");
+          entry.innerHTML = `<strong>${item.date}</strong> — ${item.location}: ${item.status}`;
+          result.appendChild(entry);
+        });
 
-      if (mockTracking[input]) {
-        const data = mockTracking[input];
-        result.innerHTML = `
-          <strong>Status:</strong> ${data.status}<br/>
-          <strong>Last Location:</strong> ${data.lastLocation}<br/>
-          <strong>Expected Delivery:</strong> ${data.eta}
-        `;
+        if (today < new Date("May 16, 2025")) {
+          const pending = document.createElement("p");
+          pending.innerHTML = "<em>Package is still in transit.</em>";
+          result.appendChild(pending);
+        } else {
+          const delivered = document.createElement("p");
+          delivered.innerHTML = "<strong>Status:</strong> Delivered.";
+          result.appendChild(delivered);
+        }
       } else {
         result.innerHTML = "<span style='color:red;'>Tracking number not found.</span>";
       }
