@@ -44,25 +44,30 @@
   <div id="result"></div>
 
   <script>
-    const trackingData = {
-      "TX239843752US": [
-        { date: "May 5", location: "New York, NY", status: "Shipment created" },
-        { date: "May 6", location: "Philadelphia, PA", status: "In transit" },
-        { date: "May 8", location: "Washington, DC", status: "In transit" },
-        { date: "May 11", location: "Richmond, VA", status: "Arrived at sorting facility" },
-        { date: "May 13", location: "Norfolk, VA", status: "Out for delivery" },
-        { date: "May 16", location: "Virginia Beach, VA", status: "Customs Hold" }
-      ]
-    };
+    const trackingNumber = "TX239843752US";
+    const today = new Date();
+    const currentMonth = today.getMonth(); // 0 = Jan, so 4 = May
+    const currentDate = today.getDate();
+
+    const updates = [
+      { date: 5, location: "New York, NY", status: "Shipment created" },
+      { date: 6, location: "Philadelphia, PA", status: "In transit" },
+      { date: 8, location: "Washington, DC", status: "In transit" },
+      { date: 11, location: "Richmond, VA", status: "Arrived at sorting facility" },
+      { date: 13, location: "Norfolk, VA", status: "Out for delivery" },
+      { date: 16, location: "Virginia Beach, VA", status: "Customs Hold" }
+    ];
 
     function trackPackage() {
       const input = document.getElementById('trackingNumber').value.trim();
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = '';
 
-      if (trackingData[input]) {
-        trackingData[input].forEach(update => {
-          resultDiv.innerHTML += `<p><strong>${update.date}</strong> - ${update.location}<br>${update.status}</p>`;
+      if (input === trackingNumber) {
+        updates.forEach(update => {
+          if (currentMonth === 4 && update.date <= currentDate) {
+            resultDiv.innerHTML += `<p><strong>May ${update.date}</strong> - ${update.location}<br>${update.status}</p>`;
+          }
         });
       } else {
         resultDiv.innerHTML = "<p>Tracking number not found.</p>";
