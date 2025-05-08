@@ -63,18 +63,13 @@
       const result = document.getElementById("trackingResult");
 
       // Example mock tracking data
-      const mockTracking = {
-        "TS123456789US": {
-          status: "In Transit",
-          lastLocation: "Philadelphia, PA",
-          eta: "May 16, 2025"
-        },
-        "TS987654321US": {
-          status: "Out for Delivery",
-          lastLocation: "Richmond, VA",
-          eta: "May 16, 2025"
-        }
-      };
+     const mockTracking = {
+  "TS123456789US": {
+    status: "In Transit",
+    lastLocation: "Philadelphia, PA",
+    eta: "May 16, 2025"
+  }
+};
 
       if (mockTracking[input]) {
         const data = mockTracking[input];
