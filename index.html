@@ -2,82 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrackSwift</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-      text-align: center;
-    }
-    .tracker {
-      background: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 500px;
-      margin: auto;
-    }
-    input, button {
-      padding: 10px;
-      margin-top: 10px;
-      width: 80%;
-    }
-    .status {
-      margin-top: 20px;
-      text-align: left;
-    }
+    body { font-family: Arial, sans-serif; padding: 2em; background: #f5f5f5; }
+    .tracker { background: #fff; padding: 2em; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .status { font-weight: bold; font-size: 1.2em; margin-top: 1em; }
   </style>
 </head>
 <body>
   <div class="tracker">
-    <h2>TrackSwift Shipment Tracker</h2>
-    <input type="text" id="trackingInput" placeholder="Enter tracking number" />
-    <br>
-    <button onclick="track()">Track</button>
-    <div id="result" class="status"></div>
+    <h2>TrackSwift Package Tracker</h2>
+    <p><strong>Tracking Number:</strong> TS987654321US</p>
+    <p class="status" id="status">Loading status...</p>
+    <p><strong>Origin:</strong> New York, NY</p>
+    <p><strong>Destination:</strong> Virginia</p>
+    <p><strong>Estimated Delivery:</strong> June 16, 2025</p>
   </div>
 
   <script>
-    const mockTrackingNumber = "TS123456789US";
+    const statusEl = document.getElementById('status');
+    const today = new Date();
+    const customsHoldDate = new Date('2025-06-16');
 
-    const timeline = [
-      { date: "May 5, 2025", location: "New York, NY", status: "Shipment Accepted" },
-      { date: "May 6, 2025", location: "New York, NY", status: "In Transit" },
-      { date: "May 8, 2025", location: "Philadelphia, PA", status: "Arrived at Facility" },
-      { date: "May 10, 2025", location: "Baltimore, MD", status: "Departed Facility" },
-      { date: "May 12, 2025", location: "Richmond, VA", status: "Out for Delivery" },
-      { date: "May 16, 2025", location: "Virginia Beach, VA", status: "Delivered" }
-    ];
-
-    function track() {
-      const input = document.getElementById("trackingInput").value.trim();
-      const result = document.getElementById("result");
-      result.innerHTML = "";
-
-      if (input === mockTrackingNumber) {
-        const today = new Date("May 8, 2025"); // <-- Change this date to simulate today
-        const progress = timeline.filter(item => new Date(item.date) <= today);
-        
-        progress.forEach(item => {
-          const entry = document.createElement("p");
-          entry.innerHTML = `<strong>${item.date}</strong> — ${item.location}: ${item.status}`;
-          result.appendChild(entry);
-        });
-
-        if (today < new Date("May 16, 2025")) {
-          const pending = document.createElement("p");
-          pending.innerHTML = "<em>Package is still in transit.</em>";
-          result.appendChild(pending);
-        } else {
-          const delivered = document.createElement("p");
-          delivered.innerHTML = "<strong>Status:</strong> Delivered.";
-          result.appendChild(delivered);
-        }
-      } else {
-        result.innerHTML = "<span style='color:red;'>Tracking number not found.</span>";
-      }
+    if (today < customsHoldDate) {
+      statusEl.textContent = "In Transit – Departed from Distribution Center";
+    } else {
+      statusEl.textContent = "Customs Hold";
     }
   </script>
 </body>
