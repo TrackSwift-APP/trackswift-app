@@ -8,12 +8,51 @@
     body { font-family: Arial, sans-serif; padding: 2em; background: #f5f5f5; }
     .tracker { background: #fff; padding: 2em; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     .status { font-weight: bold; font-size: 1.2em; margin-top: 1em; }
+
+    /* Search Bar Styles */
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      font-size: 1.2em;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 1.5em;
+    }
+
+    /* Beach Bar Styles */
+    .navbar {
+      background-color: #2f8a8c;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 5px;
+    }
+
+    .navbar a:hover {
+      background-color: #1c6163;
+    }
   </style>
 </head>
 <body>
+  <!-- Beach Bar (Navigation Bar) -->
+  <div class="navbar">
+    <a href="#home">Home</a>
+    <a href="#track">Track</a>
+    <a href="#help">Help</a>
+  </div>
+
+  <!-- Search Bar for Tracking Number -->
+  <input type="text" id="trackingInput" class="search-bar" placeholder="Enter Tracking Number" />
+
   <div class="tracker">
     <h2>TrackSwift Package Tracker</h2>
-    <p><strong>Tracking Number:</strong> TS987654321US</p>
+    <p><strong>Tracking Number:</strong> <span id="trackingNumber">TX239843752US</span></p>
     <p class="status" id="status">Loading status...</p>
     <p><strong>Origin:</strong> New York, NY</p>
     <p><strong>Destination:</strong> Virginia</p>
@@ -21,15 +60,37 @@
   </div>
 
   <script>
+    // Initialize the tracking number and status
+    const trackingNumber = "TX239843752US";
+    const trackingInput = document.getElementById('trackingInput');
     const statusEl = document.getElementById('status');
-    const today = new Date();
+    const trackingNumberDisplay = document.getElementById('trackingNumber');
     const customsHoldDate = new Date('2025-06-16');
 
-    if (today < customsHoldDate) {
-      statusEl.textContent = "In Transit – Departed from Distribution Center";
-    } else {
-      statusEl.textContent = "Customs Hold";
+    // Update status based on date
+    function updateTrackingStatus() {
+      const today = new Date();
+      
+      // If the current date is before June 16th, show 'In Transit'
+      if (today < customsHoldDate) {
+        statusEl.textContent = "In Transit – Departed from Distribution Center";
+      } else {
+        statusEl.textContent = "Customs Hold";
+      }
     }
+
+    // Listen for input change (tracking number search)
+    trackingInput.addEventListener('input', function() {
+      const userInput = trackingInput.value.trim().toUpperCase();
+      if (userInput === trackingNumber) {
+        updateTrackingStatus();
+      } else {
+        statusEl.textContent = "Tracking number not found. Please check again.";
+      }
+    });
+
+    // Display default tracking status
+    updateTrackingStatus();
   </script>
 </body>
 </html>
