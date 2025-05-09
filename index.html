@@ -44,18 +44,20 @@
   <div id="result"></div>
 
   <script>
-    const trackingNumber = "TX239843752US";
+    const trackingNumber = "TX958347281US";
     const today = new Date();
-    const currentMonth = today.getMonth(); // 0 = Jan, so 4 = May
+    const currentMonth = today.getMonth(); // May = 4 (0-indexed)
     const currentDate = today.getDate();
 
     const updates = [
-      { date: 5, location: "New York, NY", status: "Shipment created" },
-      { date: 6, location: "Philadelphia, PA", status: "In transit" },
-      { date: 8, location: "Washington, DC", status: "In transit" },
-      { date: 11, location: "Richmond, VA", status: "Arrived at sorting facility" },
-      { date: 13, location: "Norfolk, VA", status: "Out for delivery" },
-      { date: 16, location: "Virginia Beach, VA", status: "Customs Hold" }
+      { date: 9, location: "Wisconsin", status: "Shipment created" },
+      { date: 10, location: "Illinois", status: "In transit" },
+      { date: 11, location: "Ohio", status: "In transit" },
+      { date: 12, location: "Missouri", status: "In transit" },
+      { date: 13, location: "Iowa", status: "In transit" },
+      { date: 14, location: "Indiana", status: "In transit" },
+      { date: 15, location: "En route to Atlanta, GA", status: "In transit" },
+      { date: 16, location: "Atlanta, GA", status: "Customs Hold" }
     ];
 
     function trackPackage() {
