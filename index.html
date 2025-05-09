@@ -3,91 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrackSwift</title>
+  <title>TrackSwift - Package Tracking</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 30px;
       background: #f4f4f4;
-      text-align: center;
+      margin: 0;
+      padding: 20px;
     }
-    h1 {
-      color: #333;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 250px;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .tracking-result {
-      margin-top: 30px;
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
       background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      display: inline-block;
-      text-align: left;
     }
-    .status-item {
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
       margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .status {
+      margin-top: 20px;
+    }
+    .status div {
+      background: #e9ecef;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
-  <h1>Track Your Package</h1>
-  <input type="text" id="trackingNumber" placeholder="Enter tracking number"/>
-  <button onclick="trackPackage()">Track</button>
-
-  <div id="result" class="tracking-result" style="display:none;"></div>
+  <div class="container">
+    <h1>TrackSwift</h1>
+    <input type="text" id="trackingNumber" placeholder="Enter Tracking Number">
+    <button onclick="trackPackage()">Track</button>
+    <div class="status" id="statusContainer"></div>
+  </div>
 
   <script>
     const trackingData = {
-      "TX721903864US": [
-        { date: "2025-05-09", location: "Wisconsin", status: "In Transit" },
-        { date: "2025-05-10", location: "Illinois", status: "In Transit" },
-        { date: "2025-05-11", location: "Missouri", status: "In Transit" },
-        { date: "2025-05-12", location: "Iowa", status: "In Transit" },
-        { date: "2025-05-13", location: "Indiana", status: "In Transit" },
-        { date: "2025-05-14", location: "Ohio", status: "In Transit" },
-        { date: "2025-05-15", location: "Atlanta, Georgia", status: "In Transit" },
+      "TS202405090001": [
+        { date: "2025-05-09", location: "Wisconsin", status: "Shipment Received by UPS" },
+        { date: "2025-05-10", location: "Wisconsin", status: "Processed at UPS Facility" },
+        { date: "2025-05-11", location: "Illinois", status: "Departed UPS Facility" },
+        { date: "2025-05-12", location: "Indiana", status: "Arrived at UPS Facility" },
+        { date: "2025-05-13", location: "Ohio", status: "In Transit" },
+        { date: "2025-05-14", location: "Missouri", status: "In Transit" },
+        { date: "2025-05-15", location: "Iowa", status: "Package Scanned at UPS Hub" },
         { date: "2025-05-16", location: "Atlanta, Georgia", status: "Held at Customs" }
       ]
     };
 
     function trackPackage() {
       const input = document.getElementById("trackingNumber").value.trim();
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "";
+      const updates = trackingData[input];
+      const container = document.getElementById("statusContainer");
+      container.innerHTML = "";
 
-      if (!trackingData[input]) {
-        resultDiv.style.display = "block";
-        resultDiv.innerHTML = "<p>Tracking number not found.</p>";
+      if (!updates) {
+        container.innerHTML = `<div>Tracking number not found.</div>`;
         return;
       }
 
       const today = new Date().toISOString().split("T")[0];
-      const updates = trackingData[input].filter(update => update.date <= today);
-
-      if (updates.length === 0) {
-        resultDiv.style.display = "block";
-        resultDiv.innerHTML = "<p>No tracking updates available yet.</p>";
-        return;
-      }
-
-      resultDiv.style.display = "block";
       updates.forEach(update => {
-        const div = document.createElement("div");
-        div.className = "status-item";
-        div.innerHTML = `<strong>Date:</strong> ${update.date}<br><strong>Location:</strong> ${update.location}<br><strong>Status:</strong> ${update.status}<hr>`;
-        resultDiv.appendChild(div);
+        if (update.date <= today) {
+          const div = document.createElement("div");
+          div.textContent = `${update.date} - ${update.location} - ${update.status}`;
+          container.appendChild(div);
+        }
       });
     }
   </script>
